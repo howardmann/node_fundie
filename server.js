@@ -1,9 +1,12 @@
 require('dotenv').config()
 var express = require('express');
 var bodyParser = require('body-parser');
+var knexLogger = require('knex-logger');
+var knex = require('./db/knex')
 
 var app = express();
 
+app.use(knexLogger(knex));
 // Set bodyparser middleware
 app.use(bodyParser.json());
 
