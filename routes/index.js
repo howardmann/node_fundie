@@ -4,6 +4,7 @@ var router = express.Router();
 // Require controllers
 let users = require('../controllers/users.js');
 let users2 = require('../controllers/users2.js');
+let projects = require('../controllers/projects.js');
 
 // Home page
 router.get('/', (req, res, next) => {
@@ -18,6 +19,9 @@ router
   .get('/users2', users2.index)
   .get('/users2/:id', users2.show)
   .get('/catSay/', users2.catSay)
+  .get('/userCategories/', users2.userCategories)
   
-
+router
+  .get('/projects', projects.index)
+  
 module.exports = router;

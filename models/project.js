@@ -1,8 +1,47 @@
 // Dependencies
-const Project = require('objection').Model
+const Model = require('objection').Model
+let Pledge = require('./pledge')
+let Category = require('./category')
 
-Project.tableName = () => {
-  return 'projects'
+class Project extends Model {
+  static get tableName() { return 'projects' }
+  static get relationMappings() {
+    return {
+      pledges: {
+        relation: Model.HasManyRelation,
+        modelClass: Pledge,
+        join: {
+          from: 'projects.id',
+          to: 'pledges.project_id'
+        }
+      },
+      categories: {
+        relation: Model.ManyToManyRelation,
+        modelClass: Category,
+        join: {
+          from: 'projects.id',
+          through: {
+            from: 'categories_projects.project_id',
+            to: 'categories_projects.category_id'
+          },
+          to: 'categories.id'
+        }        
+      }
+    }
+  }
+
+  static get virtualAttributes() {
+    return ['pledgesTotal', 'shortfall'];
+  }
+
+  pledgesTotal() {
+    return this.pledges.reduce((tally, el) => tally += parseInt(el.amount), 0);
+  }
+  shortfall() {
+    let shortfall = parseInt(this.target_amount) - this.pledgesTotal()
+    return shortfall
+  }
+  
 }
 
 module.exports = Project

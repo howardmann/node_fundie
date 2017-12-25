@@ -2,6 +2,7 @@
 const Model = require('objection').Model
 let Project = require('./project')
 let Pledge = require('./pledge')
+let Category = require('./category')
 
 class User extends Model {
   static get tableName(){ return 'users'}
