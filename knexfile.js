@@ -10,12 +10,12 @@ require('dotenv').config()
 module.exports = {
   test: {
     client: 'pg',
-    connection: 'postgres://localhost/star_craft_test',
+    connection: 'postgres://localhost/fundie_node_test',
     migrations: {
       directory: __dirname + '/db/migrations'
     },
     seeds: {
-      directory: __dirname + '/db/seeds/test'
+      directory: __dirname + '/db/seeds'
     }
   },
   development: {
@@ -24,14 +24,14 @@ module.exports = {
       host: 'localhost',
       user: 'howardmann',
       password: null,
-      database: 'star_craft',
+      database: 'fundie_node',
       port: 5432
     },
     migrations: {
       directory: __dirname + '/db/migrations'
     },
     seeds: {
-      directory: __dirname + '/db/seeds/development'
+      directory: __dirname + '/db/seeds'
     }
   },
   production: {
@@ -41,7 +41,7 @@ module.exports = {
       directory: __dirname + '/db/migrations'
     },
     seeds: {
-      directory: __dirname + '/db/seeds/production'
+      directory: __dirname + '/db/seeds'
     }
   }
 };
