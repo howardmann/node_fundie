@@ -1,20 +1,25 @@
-let Planet = require('../models/planet');
+let User = require('../models/user2');
 
 exports.index = function (req, res, next) {
-  Planet.find()
+  User
+    .query()
+    .eager('[projects, pledges]')
     .then(data => res.json(data))
     .catch(next)
 };
 
 exports.show = function (req, res, next) {
-  Planet.findById(req.params.id)
+  User
+    .query()
+    .where('id', req.params.id)
+    .eager('[projects, pledges]')
     .then(data => res.json(data))
     .catch(next)
 };
 
-exports.create = function (req, res, next) {
-  let { name } = req.body
-  Planet.create({ name })
+exports.catSay = function (req, res, next) {
+  User
+    .catSay()
     .then(data => res.json(data))
     .catch(next)
-}
+};
