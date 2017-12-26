@@ -10,7 +10,7 @@ let util = require('util')
 let app = require('../server.js');
 let knex = require('../db/knex');
 
-describe.only('#Users', function () {
+describe('#Users', function () {
   // Before each test we rollback the migrations and run the seed file again
   let reset = function (done) {
     knex.migrate.rollback()
