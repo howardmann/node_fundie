@@ -23,7 +23,7 @@ describe.only('#Users', function () {
   beforeEach(reset);
   afterEach(reset);
 
-  it.only('GET /projects should list ALL projects and associated pledges, categories and computed properties', function (done) {
+  it('GET /projects should list ALL projects and associated pledges, categories and computed properties', function (done) {
     chai.request(app)
       .get('/projects')
       .end(function (err, res) {
@@ -166,6 +166,68 @@ describe.only('#Users', function () {
           }
         ]
         // console.log(util.inspect(input, false, null))
+        expect(input).to.eql(actual)
+        done();
+      });
+  });
+  it('GET /projects/:id should list a SINGLE project and associated pledges, categories and computed properties', function (done) {
+    chai.request(app)
+      .get('/projects/1')
+      .end(function (err, res) {
+        let input = res.body
+        let actual = {
+          id: 1,
+          name: 'Chariot',
+          description: 'TV series where horses ride humans.',
+          target_amount: '6000.00',
+          user_id: 1,
+          pledges:
+            [{
+              id: 1,
+              amount: '100.00',
+              comment: 'Go Howie',
+              user_id: 2,
+              project_id: 1
+            },
+            {
+              id: 2,
+              amount: '1000.00',
+              comment: 'I love horses',
+              user_id: 3,
+              project_id: 1
+            }],
+          categories: [{ id: 1, name: 'art' }, { id: 7, name: 'film' }],
+          pledgesTotal: 1100,
+          shortfall: 4900
+        }
+        // console.log(util.inspect(input, false, null))
+        expect(input).to.eql(actual)
+        done();
+      });
+  });
+  it.only('POST /projects/:id should create a SINGLE project and attach associated user and categories', function (done) {
+    chai.request(app)
+      .post('/projects')
+      .send({
+        name: 'miaow miaow',
+        description: 'cat game',
+        target_amount: 3000,
+        user_id: 1,
+        category_ids: [1,7]
+      })
+      .end(function (err, res) {
+        let input = res.body
+        let actual = {
+          id: 9,
+          name: 'miaow miaow',
+          description: 'cat game',
+          target_amount: '3000.00',
+          user_id: 1,
+          pledges: [],
+          categories: [{ id: 1, name: 'art' }, { id: 7, name: 'film' }],
+          pledgesTotal: null,
+          shortfall: 3000
+        }
         expect(input).to.eql(actual)
         done();
       });

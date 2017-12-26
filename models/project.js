@@ -35,6 +35,9 @@ class Project extends Model {
   }
 
   pledgesTotal() {
+    if (!this.pledges || this.pledges.length === 0) {
+      return null
+    }
     return this.pledges.reduce((tally, el) => tally += parseInt(el.amount), 0);
   }
   shortfall() {

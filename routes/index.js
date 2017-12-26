@@ -23,5 +23,7 @@ router
   
 router
   .get('/projects', projects.index)
+  .get('/projects/:id', projects.show)
+  .post('/projects', projects.create)
   
 module.exports = router;
