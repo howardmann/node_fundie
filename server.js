@@ -6,7 +6,7 @@ var knex = require('./db/knex')
 
 var app = express();
 
-app.use(knexLogger(knex));
+// app.use(knexLogger(knex));
 // Set bodyparser middleware
 app.use(bodyParser.json());
 

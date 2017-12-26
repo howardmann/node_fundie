@@ -11,7 +11,7 @@ let app = require('../server.js');
 let knex = require('../db/knex');
 
 
-describe.only('#Users', function () {
+describe('#Projects', function () {
   // Before each test we rollback the migrations and run the seed file again
   let reset = function (done) {
     knex.migrate.rollback()
@@ -90,7 +90,7 @@ describe.only('#Users', function () {
               id: 3,
               name: 'crafts'
             }],
-            pledgesTotal: 0,
+            pledgesTotal: null,
             shortfall: 3000
           },
           {
@@ -147,7 +147,7 @@ describe.only('#Users', function () {
               id: 8,
               name: 'food'
             }],
-            pledgesTotal: 0,
+            pledgesTotal: null,
             shortfall: 5000
           },
           {
@@ -161,7 +161,7 @@ describe.only('#Users', function () {
               id: 6,
               name: 'fashion'
             }],
-            pledgesTotal: 0,
+            pledgesTotal: null,
             shortfall: 7000
           }
         ]
@@ -205,7 +205,7 @@ describe.only('#Users', function () {
         done();
       });
   });
-  it.only('POST /projects/:id should create a SINGLE project and attach associated user and categories', function (done) {
+  it('POST /projects/:id should create a SINGLE project and attach associated user and categories', function (done) {
     chai.request(app)
       .post('/projects')
       .send({
@@ -232,6 +232,104 @@ describe.only('#Users', function () {
         done();
       });
   });
+  
+  describe('PUT /projects/:id', () => {
+    it('should update a SINGLE project and attach associated user', function (done) {
+      chai.request(app)
+        .put('/projects/1')
+        .send({
+          name: 'Chariot Updated',
+          user_id: 2
+        })
+        .end(function (err, res) {
+          let input = res.body
+          let actual = {
+            id: 1,
+            name: 'Chariot Updated',
+            description: 'TV series where horses ride humans.',
+            target_amount: '6000.00',
+            user_id: 2,
+            pledges:
+              [{
+                id: 1,
+                amount: '100.00',
+                comment: 'Go Howie',
+                user_id: 2,
+                project_id: 1
+              },
+              {
+                id: 2,
+                amount: '1000.00',
+                comment: 'I love horses',
+                user_id: 3,
+                project_id: 1
+              }],
+            categories: [{ id: 1, name: 'art' }, { id: 7, name: 'film' }],
+            pledgesTotal: 1100,
+            shortfall: 4900
+          }
+          // console.log(util.inspect(input, false, null))
+          expect(input).to.eql(actual)
+          done();
+        });
+    });
+    it('should update a SINGLE project and attach categories if given a category_ids array', function (done) {
+      chai.request(app)
+        .put('/projects/1')
+        .send({
+          name: 'Chariot Updated',
+          user_id: 2,
+          category_ids: [2]
+        })
+        .end(function (err, res) {
+          let input = res.body
+          let actual = {
+            id: 1,
+            name: 'Chariot Updated',
+            description: 'TV series where horses ride humans.',
+            target_amount: '6000.00',
+            user_id: 2,
+            pledges:
+              [{
+                id: 1,
+                amount: '100.00',
+                comment: 'Go Howie',
+                user_id: 2,
+                project_id: 1
+              },
+              {
+                id: 2,
+                amount: '1000.00',
+                comment: 'I love horses',
+                user_id: 3,
+                project_id: 1
+              }],
+            categories: [{ id: 2, name: 'comics' }],
+            pledgesTotal: 1100,
+            shortfall: 4900
+          }
+          // console.log(util.inspect(input, false, null))
+          expect(input).to.eql(actual)
+          done();
+        });
+    });
 
+  })
 
+  it('DELETE / projects/:id should delete a project', (done) => {
+    chai.request(app)
+      .delete('/projects/1')
+      .end(function (err, res) {
+        let input = res.body[0].id
+        let actual = 1
+        expect(input).to.equal(actual)
+        chai.request(app)
+          .get('/projects')
+          .end( function (err, res) {
+            let input = res.body.map(project => project.id)
+            expect(input).to.not.include(actual)
+            done()
+          })
+      })    
+  })
 });

@@ -25,5 +25,7 @@ router
   .get('/projects', projects.index)
   .get('/projects/:id', projects.show)
   .post('/projects', projects.create)
+  .put('/projects/:id', projects.update)
+  .delete('/projects/:id', projects.delete)
   
 module.exports = router;
