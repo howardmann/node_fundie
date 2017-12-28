@@ -33,10 +33,16 @@ class User extends Model {
   }
 
   pledgesTotal() {
+    if (!this.pledges || this.pledges.length === 0) {
+      return null
+    }
     return this.pledges.reduce((tally, el) => tally += parseInt(el.amount),0);
   }
 
   projectsTotal() {
+    if (!this.projects || this.projects.length === 0) {
+      return null
+    }    
     return this.projects.reduce((tally, el) => tally += parseInt(el.target_amount), 0);
   }
   

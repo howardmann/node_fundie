@@ -5,6 +5,7 @@ var router = express.Router();
 let users = require('../controllers/users.js');
 let users2 = require('../controllers/users2.js');
 let projects = require('../controllers/projects.js');
+let pledges = require('../controllers/pledges.js');
 
 // Home page
 router.get('/', (req, res, next) => {
@@ -27,5 +28,12 @@ router
   .post('/projects', projects.create)
   .put('/projects/:id', projects.update)
   .delete('/projects/:id', projects.delete)
+
+router
+  .get('/pledges', pledges.index)
+  .get('/pledges/:id', pledges.show)
+  .post('/pledges', pledges.create)
+  .put('/pledges/:id', pledges.update)
+  .delete('/pledges/:id', pledges.delete)
   
 module.exports = router;
