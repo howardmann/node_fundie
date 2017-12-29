@@ -55,12 +55,42 @@ describe('#Authentication', function () {
           chai.request(app)
             .get('/users')
             .end(function(err, res){
+              // console.log(util.inspect(res.body, false, null))
               let emailArr = res.body.map(user => user.email)
               expect(emailArr).to.include('new@gmail.com')
               done();
             })
         });
     });
+  })
 
+  describe.only('POST /login', function(){
+    beforeEach(function(done){
+      chai.request(app)
+        .post('/signup')
+        .send({
+          email: 'chicken@gmail.com',
+          name: 'chickenman',
+          password: 'chicken'
+        })
+        .then(function(err, res){
+          done()
+        })
+    })
+
+    it('should validate when username and password both match', function (done) {
+      chai.request(app)
+        .post('/login')
+        .send({
+          email: 'chicken@gmail.com',
+          password: 'chicken'
+        })
+        .end(function (err, res) {
+          let input = res.body
+          console.log(input)
+          // expect(input).to.equal(actual)
+          done();
+        });
+    });    
   })
 });
