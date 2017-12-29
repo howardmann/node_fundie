@@ -12,6 +12,9 @@ let auth = require('../controllers/auth.js')
 
 // Home page
 router.get('/', (req, res, next) => {
+  console.log(req.session)
+  req.session.views+=1
+  console.log(req.session.views)
   res.json({url: '/', message: req.flash('signupMessage')})
 })
 

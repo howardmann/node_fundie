@@ -6,7 +6,8 @@ var knex = require('./db/knex')
 
 // Authentication
 var passport = require('passport')
-var session = require('express-session')
+// var session = require('express-session')
+var session = require('cookie-session')
 var flash = require('connect-flash');
 
 var app = express();
@@ -17,10 +18,19 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 // Authentication
+// express-session stored in mem
+// Only exists during application runtime, if server reboots, loses all session data
+// app.use(session({
+//   secret: 'keyboard cat',
+//   resave: true,
+//   saveUninitialized: true
+// }))
+
+// cookie-session stored in cookie
+// Difference is it persists beyond application runtime but stores more data in client cookie
 app.use(session({
-  secret: 'keyboard cat',
-  resave: true,
-  saveUninitialized: true
+  name: 'session',
+  keys: ['keyboard cat']
 }))
 
 app.use(passport.initialize())
