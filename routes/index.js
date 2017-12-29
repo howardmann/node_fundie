@@ -6,6 +6,7 @@ let users = require('../controllers/users.js');
 let users2 = require('../controllers/users2.js');
 let projects = require('../controllers/projects.js');
 let pledges = require('../controllers/pledges.js');
+let categories = require('../controllers/categories.js');
 
 // Home page
 router.get('/', (req, res, next) => {
@@ -35,5 +36,12 @@ router
   .post('/pledges', pledges.create)
   .put('/pledges/:id', pledges.update)
   .delete('/pledges/:id', pledges.delete)
+
+  router
+  .get('/categories', categories.index)
+  .get('/categories/:id', categories.show)
+  .post('/categories', categories.create)
+  .put('/categories/:id', categories.update)
+  .delete('/categories/:id', categories.delete)
   
 module.exports = router;
