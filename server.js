@@ -4,14 +4,31 @@ var bodyParser = require('body-parser');
 var knexLogger = require('knex-logger');
 var knex = require('./db/knex')
 
+// Authentication
+var passport = require('passport')
+var session = require('express-session')
+var flash = require('connect-flash');
+
 var app = express();
 
 // app.use(knexLogger(knex));
 // Set bodyparser middleware
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
+
+// Authentication
+app.use(session({
+  secret: 'keyboard cat',
+  resave: true,
+  saveUninitialized: true
+}))
+
+app.use(passport.initialize())
+app.use(passport.session())
+app.use(flash())
 
 // Routes 
-app.use(require('./routes/index'));
+app.use(require('./routes/index'))
 
 // Catch and send error messages
 app.use(function (err, req, res, next) {

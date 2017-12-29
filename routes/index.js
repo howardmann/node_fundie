@@ -7,11 +7,18 @@ let users2 = require('../controllers/users2.js');
 let projects = require('../controllers/projects.js');
 let pledges = require('../controllers/pledges.js');
 let categories = require('../controllers/categories.js');
+let auth = require('../controllers/auth.js')
+
 
 // Home page
 router.get('/', (req, res, next) => {
-  res.json({status: 'ok'})
+  res.json({url: '/', message: req.flash('signupMessage')})
 })
+
+router.get('/fail', (req, res, next) => {
+  res.json({url: '/fail', message: req.flash('signupMessage')})
+})
+
 
 router
   .get('/users', users.index)
@@ -37,11 +44,15 @@ router
   .put('/pledges/:id', pledges.update)
   .delete('/pledges/:id', pledges.delete)
 
-  router
+router
   .get('/categories', categories.index)
   .get('/categories/:id', categories.show)
   .post('/categories', categories.create)
   .put('/categories/:id', categories.update)
   .delete('/categories/:id', categories.delete)
-  
+
+// Passport user signup, login
+router
+  .post('/signup', auth.signup);
+
 module.exports = router;

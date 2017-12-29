@@ -9,7 +9,7 @@ exports.seed = async function (knex, Promise) {
   // Seed
   await knex.raw(`
     INSERT INTO Users (id, name, email) VALUES
-    (1, 'Howie', 'howiebuger@gmail.com'),
+    (1, 'Howie', 'howieburger@gmail.com'),
     (2, 'Hela', 'helabadga@gmail.com'),
     (3, 'Felix', 'ilovecroissants@gmail.com'),
     (4, 'Joseph', 'joseph@gmail.com')

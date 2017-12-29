@@ -31,7 +31,8 @@ describe('#Users', function () {
         let actual = [{
             id: 1,
             name: 'Howie',
-            email: 'howiebuger@gmail.com',
+            password: null,
+            email: 'howieburger@gmail.com',
             bank: '5000.00',
             projects: [{
                 id: 1,
@@ -59,6 +60,7 @@ describe('#Users', function () {
           {
             id: 2,
             name: 'Hela',
+            password: null,
             email: 'helabadga@gmail.com',
             bank: '5000.00',
             projects: [{
@@ -95,6 +97,7 @@ describe('#Users', function () {
           {
             id: 3,
             name: 'Felix',
+            password: null,
             email: 'ilovecroissants@gmail.com',
             bank: '5000.00',
             projects: [{
@@ -115,6 +118,7 @@ describe('#Users', function () {
           {
             id: 4,
             name: 'Joseph',
+            password: null,
             email: 'joseph@gmail.com',
             bank: '5000.00',
             projects: [{
@@ -154,6 +158,7 @@ describe('#Users', function () {
         let actual = [{
           id: 2,
           name: 'Hela',
+          password: null,
           email: 'helabadga@gmail.com',
           bank: '5000.00',
           projects:
