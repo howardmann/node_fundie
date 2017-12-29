@@ -12,11 +12,11 @@ let auth = require('../controllers/auth.js')
 
 // Home page
 router.get('/', (req, res, next) => {
-  res.json({url: '/', message: req.flash('signupMessage')})
+  res.json({url: '/', message: req.flash('message')})
 })
 
 router.get('/fail', (req, res, next) => {
-  res.json({url: '/fail', message: req.flash('signupMessage')})
+  res.json({url: '/fail', message: req.flash('message')})
 })
 
 
@@ -53,6 +53,7 @@ router
 
 // Passport user signup, login
 router
-  .post('/signup', auth.signup);
+  .post('/signup', auth.signup)
+  .post('/login', auth.login);
 
 module.exports = router;

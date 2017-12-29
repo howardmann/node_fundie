@@ -30,6 +30,25 @@ passport.use('local-signup', new LocalStrategy({
       })
   }
 ));
+passport.use('local-login', new LocalStrategy({
+    usernameField: 'email',
+    passwordField: 'password',
+    passReqToCallback: true
+  },
+  function (req, email, password, done) {
+    User
+      .query()
+      .where('email', email)
+      .first()
+      .then(user => {
+        let passwordValid = bcrypt.compareSync(password, user.password)
+        if (passwordValid) {
+          return done(null, user)
+        }
+        return done(null, false);
+      })
+  }
+));
 
 passport.serializeUser(function (user, done) {
   done(null, user)

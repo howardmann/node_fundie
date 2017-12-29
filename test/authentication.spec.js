@@ -64,7 +64,7 @@ describe('#Authentication', function () {
     });
   })
 
-  describe.only('POST /login', function(){
+  describe('POST /login', function(){
     beforeEach(function(done){
       chai.request(app)
         .post('/signup')
@@ -78,7 +78,7 @@ describe('#Authentication', function () {
         })
     })
 
-    it('should validate when username and password both match', function (done) {
+    it('should validate and redirect to / when username and password both match', function (done) {
       chai.request(app)
         .post('/login')
         .send({
@@ -86,9 +86,23 @@ describe('#Authentication', function () {
           password: 'chicken'
         })
         .end(function (err, res) {
-          let input = res.body
-          console.log(input)
-          // expect(input).to.equal(actual)
+          let input = res.body.url
+          let actual = '/'
+          expect(input).to.equal(actual)
+          done();
+        });
+    });    
+    it('should validate and redirect to /fail when username and password dont match', function (done) {
+      chai.request(app)
+        .post('/login')
+        .send({
+          email: 'chicken@gmail.com',
+          password: 'bad password'
+        })
+        .end(function (err, res) {
+          let input = res.body.url
+          let actual = '/fail'
+          expect(input).to.equal(actual)
           done();
         });
     });    

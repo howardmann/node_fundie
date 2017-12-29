@@ -6,13 +6,26 @@ exports.signup = passport.authenticate('local-signup', {
   successRedirect: '/',
   failureRedirect: '/fail',
   failureFlash: {
-    type: 'signupMessage',
+    type: 'message',
     message: 'Email is already taken'
   },
   successFlash: {
-    type: 'signupMessage',
+    type: 'message',
     message: 'Successfully signed up.'
   }
 })
 
+
+exports.login = passport.authenticate('local-login', {
+  successRedirect: '/',
+  failureRedirect: '/fail',
+  failureFlash: {
+    type: 'message',
+    message: 'Email and/or password do not match.'
+  },
+  successFlash: {
+    type: 'message',
+    message: 'Successfully logged in.'
+  }
+})
 
