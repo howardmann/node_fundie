@@ -54,6 +54,7 @@ router
 // Passport user signup, login
 router
   .post('/signup', auth.signup)
-  .post('/login', auth.login);
+  .post('/login', auth.login)
+  .get('/logout', auth.logout)
 
 module.exports = router;

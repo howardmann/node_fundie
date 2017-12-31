@@ -107,4 +107,35 @@ describe('#Authentication', function () {
         });
     });    
   })
+  describe('GET /logout', function(){
+    beforeEach(function(done){
+      chai.request(app)
+        .post('/signup')
+        .send({
+          email: 'chicken@gmail.com',
+          name: 'chickenman',
+          password: 'chicken'
+        })
+        .then(function(err, res){
+          chai.request(app)
+            .post('/login')
+            .send({
+              email: 'chicken@gmail.com',
+              password: 'chicken'              
+            })
+            .then(() => done())
+        })
+    })
+
+    it.only('should logout and redirect to / if a user has logged in', function (done) {
+      chai.request(app)
+        .get('/logout')
+        .end(function (err, res) {
+          let input = res.body.url
+          let actual = '/'
+          expect(input).to.equal(actual)
+          done();
+        });
+    });    
+  })
 });

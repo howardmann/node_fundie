@@ -15,7 +15,6 @@ exports.signup = passport.authenticate('local-signup', {
   }
 })
 
-
 exports.login = passport.authenticate('local-login', {
   successRedirect: '/',
   failureRedirect: '/fail',
@@ -29,3 +28,8 @@ exports.login = passport.authenticate('local-login', {
   }
 })
 
+exports.logout = function(req, res, next) {
+  req.logout();
+  req.flash('message', 'Succesfully logged out');
+  res.redirect('/');
+}
