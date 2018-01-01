@@ -33,3 +33,13 @@ exports.logout = function(req, res, next) {
   req.flash('message', 'Succesfully logged out');
   res.redirect('/');
 }
+
+// =========AUTHORIZATION MIDDLEWARE=======
+// Beautiful middleware syntax, if you are not authenticated then redirect, otherwise proceed with next
+exports.loginRequired = function (req, res, next) {
+  if (!req.isAuthenticated()) {
+    req.flash('message', 'Must be authenticated');
+    return res.redirect("/");
+  }
+  next()
+};

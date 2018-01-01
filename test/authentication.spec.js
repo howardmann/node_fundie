@@ -8,7 +8,11 @@ let util = require('util')
 
 // App dependencies
 let app = require('../server.js');
+
 let knex = require('../db/knex');
+// Use agent to retain cookies with each request, this is needed for auth and flash messages
+let agent = chai.request.agent(app)
+
 
 
 describe('#Authentication', function () {
@@ -79,30 +83,38 @@ describe('#Authentication', function () {
     })
 
     it('should validate and redirect to / when username and password both match', function (done) {
-      chai.request(app)
+      chai.request.agent(app)
         .post('/login')
         .send({
           email: 'chicken@gmail.com',
           password: 'chicken'
         })
         .end(function (err, res) {
-          let input = res.body.url
-          let actual = '/'
-          expect(input).to.equal(actual)
+          let input = res.body
+          let actual = {
+            url: '/',
+            message: ['Successfully logged in.'],
+            isLogin: true
+          }
+          expect(input).to.eql(actual)
           done();
         });
     });    
     it('should validate and redirect to /fail when username and password dont match', function (done) {
-      chai.request(app)
+      chai.request.agent(app)
         .post('/login')
         .send({
           email: 'chicken@gmail.com',
           password: 'bad password'
         })
         .end(function (err, res) {
-          let input = res.body.url
-          let actual = '/fail'
-          expect(input).to.equal(actual)
+          let input = res.body
+          let actual = {
+            url: '/fail',
+            message: ['Email and/or password do not match.'],
+            isLogin: false
+          }
+          expect(input).to.eql(actual)
           done();
         });
     });    
@@ -127,15 +139,64 @@ describe('#Authentication', function () {
         })
     })
 
-    it.only('should logout and redirect to / if a user has logged in', function (done) {
-      chai.request(app)
+    it('should logout and redirect to / if a user has logged in', function (done) {
+      agent
         .get('/logout')
         .end(function (err, res) {
-          let input = res.body.url
-          let actual = '/'
-          expect(input).to.equal(actual)
+          let input = res.body
+          let actual = { url: '/', message: ['Succesfully logged out'], isLogin: false }
+          expect(input).to.eql(actual)
           done();
         });
     });    
+  })
+
+  describe('GET /secret', function(){
+    // Log in
+    beforeEach(function(done){
+      chai.request(app)
+        .post('/signup')
+        .send({
+          email: 'chicken@gmail.com',
+          name: 'chickenman',
+          password: 'chicken'
+        })
+        .then(() => done())
+    })
+
+    it('should view page if user is loggedin and authorized', function (done) {
+      agent
+        .post('/login')
+        .send({
+          email: 'chicken@gmail.com',
+          password: 'chicken'
+        })
+        .end(function(err, res) {
+          agent
+            .get('/secret')
+            .end(function (err, res) {
+              let input = res.body
+              let actual = { secret: 42, isLogin: true }
+              expect(input).to.eql(actual)
+              done();
+            });
+        })
+    });    
+    it('should redirect if user is not loggedin or authorized', function (done) {
+      chai.request.agent(app)
+        .get('/secret')
+        .end(function (err, res) {
+          let input = res.body
+          let actual = { 
+            isLogin: false,
+            message: [
+              "Must be authenticated"
+            ],
+            url: "/"
+          }
+          expect(input).to.eql(actual)
+          done();
+        });
+    })
   })
 });

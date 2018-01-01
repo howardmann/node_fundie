@@ -12,11 +12,11 @@ let auth = require('../controllers/auth.js')
 
 // Home page
 router.get('/', (req, res, next) => {
-  res.json({url: '/', message: req.flash('message')})
+  res.json({url: '/', message: req.flash('message'), isLogin: req.isAuthenticated()})
 })
 
 router.get('/fail', (req, res, next) => {
-  res.json({url: '/fail', message: req.flash('message')})
+  res.json({ url: '/fail', message: req.flash('message'), isLogin: req.isAuthenticated()})
 })
 
 
@@ -56,5 +56,8 @@ router
   .post('/signup', auth.signup)
   .post('/login', auth.login)
   .get('/logout', auth.logout)
+  .get('/secret', auth.loginRequired, (req, res, next) => {
+    res.json({secret: 42, isLogin: req.isAuthenticated()})
+  })
 
 module.exports = router;
