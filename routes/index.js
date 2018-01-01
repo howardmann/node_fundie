@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+let _ = require('lodash')
 
 // Require controllers
 let users = require('../controllers/users.js');
@@ -8,6 +9,7 @@ let projects = require('../controllers/projects.js');
 let pledges = require('../controllers/pledges.js');
 let categories = require('../controllers/categories.js');
 let auth = require('../controllers/auth.js')
+
 
 
 // Home page
@@ -57,7 +59,12 @@ router
   .post('/login', auth.login)
   .get('/logout', auth.logout)
   .get('/secret', auth.loginRequired, (req, res, next) => {
-    res.json({secret: 42, isLogin: req.isAuthenticated()})
+    res.json({
+      secret: 42, 
+      isLogin: req.isAuthenticated(),
+      userId: _.get(req, 'user.id'),
+      userEmail: _.get(req, 'user.email')
+    })
   })
 
 module.exports = router;

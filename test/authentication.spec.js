@@ -176,7 +176,12 @@ describe('#Authentication', function () {
             .get('/secret')
             .end(function (err, res) {
               let input = res.body
-              let actual = { secret: 42, isLogin: true }
+              let actual = { 
+                secret: 42, 
+                isLogin: true,
+                userEmail: "chicken@gmail.com",
+                userId: 6
+              }
               expect(input).to.eql(actual)
               done();
             });
